@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a structure for a node in the linked list
+struct Node {
+    char data;
+    struct Node* next;
+};
+
+// Function to insert a character at the end of the linked list
+void insertAtEnd(struct Node** head, char newData) {
+    // Create a new node
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    
+    // Set the data for the new node
+    newNode->data = newData;
+    newNode->next = NULL;
+
+    // If the linked list is empty, set the new node as the head
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    // Traverse to the end of the linked list
+    struct Node* last = *head;
+    while (last->next != NULL) {
+        last = last->next;
+    }
+
+    // Attach the new node at the end
+    last->next = newNode;
+}
+
+// Function to print the linked list
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%c ", node->data);
+        node = node->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    // Initialize an empty linked list
+    struct Node* head = NULL;
+
+    // Insert characters into the linked list
+    insertAtEnd(&head, 'A');
+    insertAtEnd(&head, 'B');
+    insertAtEnd(&head, 'C');
+    insertAtEnd(&head, 'D');
+
+    // Print the linked list
+    printf("Linked List: ");
+    printList(head);
+
+    return 0;
+}
