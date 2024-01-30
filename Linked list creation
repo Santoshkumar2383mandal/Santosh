@@ -1,0 +1,219 @@
+l#include <stdio.h>
+#include <stdlib.h>
+
+// Define a structure for a node in the linked list
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function to create a new node with the given data
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert a new node at the start of the linked list
+void insertStart(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    newNode->next = *head;
+    *head = newNode;
+}
+
+// Function to insert a new node at the end of the linked list
+void insertEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+
+    if (*head == NULL) {
+        // If the linked list is empty, set the new node as the head
+        *head = newNode;
+    } else {
+        // Traverse to the end of the list and insert the new node
+        struct Node* current = *head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = newNode;
+    }
+}
+
+// Function to insert a new node before a given element in the linked list
+void insertBefore(struct Node** head, int x, int data) {
+    struct Node* newNode = createNode(data);
+
+    // If the linked list is empty or x is the first element
+    if (*head == NULL || (*head)->data == x) {
+        newNode->next = *head;
+        *head = newNode;
+        return;
+    }
+
+    // Traverse the list to find the element x
+    struct Node* current = *head;
+    while (current->next != NULL && current->next->data != x) {
+        current = current->next;
+    }
+
+    // If x is found, insert the new node before it
+    if (current->next != NULL) {
+        newNode->next = current->next;
+        current->next = newNode;
+    } else {
+        // If x is not found, print an error message
+        printf("Element %d not found in the linked list\n", x);
+        free(newNode);
+    }
+}
+
+// Function to insert a new node after a given element in the linked list
+void insertAfter(struct Node* head, int x, int data) {
+    struct Node* newNode = createNode(data);
+
+    // Traverse the list to find the element x
+    struct Node* current = head;
+    while (current != NULL && current->data != x) {
+        current = current->next;
+    }
+
+    // If x is found, insert the new node after it
+    if (current != NULL) {
+        newNode->next = current->next;
+        current->next = newNode;
+    } else {
+        // If x is not found, print an error message
+        printf("Element %d not found in the linked list\n", x);
+        free(newNode);
+    }
+}
+
+// Function to delete the first element of the linked list
+void deleteFirst(struct Node** head) {
+    if (*head == NULL) {
+        printf("Linked list is empty, cannot delete\n");
+        return;
+    }
+
+    struct Node* temp = *head;
+    *head = (*head)->next;
+    free(temp);
+}
+
+// Function to delete the last element of the linked list
+void deleteLast(struct Node** head) {
+    if (*head == NULL) {
+        printf("Linked list is empty, cannot delete\n");
+        return;
+    }
+
+    if ((*head)->next == NULL) {
+        // If there is only one element in the linked list
+        free(*head);
+        *head = NULL;
+        return;
+    }
+
+    struct Node* current = *head;
+    while (current->next->next != NULL) {
+        current = current->next;
+    }
+
+    free(current->next);
+    current->next = NULL;
+}
+
+// Function to delete a node with the given data from the linked list
+void deleteElement(struct Node** head, int x) {
+    if (*head == NULL) {
+        printf("Linked list is empty, cannot delete\n");
+        return;
+    }
+
+    // If the element to be deleted is the first element
+    if ((*head)->data == x) {
+        struct Node* temp = *head;
+        *head = (*head)->next;
+        free(temp);
+        return;
+    }
+
+    struct Node* current = *head;
+    while (current->next != NULL && current->next->data != x) {
+        current = current->next;
+    }
+
+    if (current->next != NULL) {
+        struct Node* temp = current->next;
+        current->next = current->next->next;
+        free(temp);
+    } else {
+        // If x is not found, print an error message
+        printf("Element %d not found in the linked list\n", x);
+    }
+}
+
+// Function to print the linked list
+void printList(struct Node* head) {
+    struct Node* current = head;
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* head = NULL;
+    int data, n, x;
+
+    // Create a linked list
+    printf("Enter the number of elements in the linked list: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter element %d: ", i + 1);
+        scanf("%d", &data);
+        insertEnd(&head, data);
+    }
+
+    // Display the initial linked list
+    printf("Initial Linked List: ");
+    printList(head);
+
+    // Insert an element at the start of the linked list
+    printf("\nEnter an element to insert at the start: ");
+    scanf("%d", &data);
+    insertStart(&head, data);
+
+    // Display the linked list after insertion
+    printf("Linked List after insertion at the start: ");
+    printList(head);
+
+    // Insert an element at the end of the linked list
+    printf("\nEnter an element to insert at the end: ");
+    scanf("%d", &data);
+    insertEnd(&head, data);
+
+    // Display the linked list after insertion at the end
+    printf("Linked List after insertion at the end: ");
+    printList(head);
+
+    // Insert an element before an existing element
+    printf("\nEnter the existing element before which you want to insert a new element: ");
+    scanf("%d", &x);
+    printf("Enter the new element to be inserted before %d: ", x);
+    scanf("%d", &data);
+    insertBefore(&head, x, data);
+
+    // Display the linked list after insertion before an existing element
+    printf("Linked List after insertion before %d: ", x);
+    printList(head);
+
+    // Insert an element after an existing element
+    printf("\nEnter the existing element
+
