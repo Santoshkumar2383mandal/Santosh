@@ -12,7 +12,7 @@ public class permutation {
         for(int i = 0; i<str.length();i++){
             char curr = str.charAt(i);
 
-            String Newstr = str.substring(0, i) + str.substring( i+1);
+            String Newstr = str.substring(0, i) + str.substring( i+1);    // what is the meaning of the code??
             findpermutation(Newstr, ans + curr);
         }
     }
